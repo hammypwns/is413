@@ -5,10 +5,10 @@ Testing random stuff fam.
 
 MSG = "Hello World"
 MYINT = 5
-MYFLOAT = 6.2
+MYFLOAT = 6.2545322
 ONESTRING = "My"
 TWOSTRING = "First"
-THREESTRING = "Sentence"
+THREESTRING = "Sentaence"
 MYSPACE = " "
 MYPERIOD = "."
 
