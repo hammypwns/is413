@@ -1,0 +1,32 @@
+<%inherit file="app_base.htm" />
+
+<%block name="title">
+    <h1>${ page_title }</h1>
+</%block>
+
+<%block name="content">   
+    <div class="col-sm-8">
+        <div class="col-sm-2">
+        % for i in product_images:
+            <div class="thumbnail">
+                <img src="${i}" alt="alternate view of ${product.name}"/>
+            </div>
+        % endfor
+        </div>
+        <div class="col-sm-4">
+            <img class="thumbnail" id="large-img" src="${product_images[0]}" alt="${product.name}"/>
+            <p>${product.category}</p>
+            <p>${product.__class__.__name__}</p>
+            <p>${product.price}</p>
+        </div>
+        <div class="col-sm-6">${product.description}</div>
+        <div class="col-sm-6">
+            % if hasattr(product, 'quantity'):
+            <div class="btn-group">
+                <input class="form-control" disabled value="${product.quantity} available"/>
+            </div>
+            % endif
+            <button class="btn btn-primary">Buy Now</button>
+        </div>
+    </div>    
+</%block>

@@ -1,0 +1,94 @@
+<%inherit file="base.htm" />
+
+<%! from catalog import models as cmod %>
+
+	<%block name="header">
+	<nav class="navbar navbar-inverse">
+		<div class="container">
+			<!-- Brand and toggle get grouped for better mobile display -->
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" aria-expanded="false">
+					<span class="sr-only">Toggle navigation</span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a class="navbar-brand" href="/">
+					<span class="brand"><img alt="small music note logo" src="${STATIC_URL}/homepage/media/logo.png" class="brand" /> FOMO</span>
+				</a>
+			</div>
+	
+			<!-- Collect the nav links, forms, and other content for toggling -->
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+				<ul class="nav navbar-nav navbar-right">
+					<li><a href="/about">About Us</a></li>
+					<li><a href="/contact">Contact</a></li>
+					<li><a href="/faq">FAQ</a></li>
+					<li><a href="/terms">Terms</a></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Account <span class="caret"></span></a>
+						<ul class="dropdown-menu">
+							${login_logout_menu()}
+							<li role="separator" class="divider"></li>
+							${my_account_menu()}
+						</ul>
+					</li>
+				</ul>
+			</div><!-- /.navbar-collapse -->
+		</div><!-- /.container-fluid -->
+	</nav>
+</%block>
+
+<%block name="head">
+	<script src="${ STATIC_URL }catalog/scripts/active_ul.js"></script>
+</%block>
+
+<%block name="leftsidebar">
+	<div class="col-sm-2">    
+		<ul class="seo-list">
+			<a id="all" href="/catalog/index"><li>All Products</li></a>
+			% for c in cmod.Category.objects.all():
+				<a href="/catalog/index/${c.id}"><li>${c.name}</li></a>
+			% endfor
+		</ul>
+    </div>   
+</%block>
+<%block name="rightsidebar">
+	<div class="col-sm-2">
+		<ol class="list-recent-viewed">
+		Recently Viewed:
+		% for p in request.recently_viewed[0:5]:
+		<li>
+			<a href="/catalog/details/${p.id}">
+				<div class="recent-viewed">
+					<img src="${p.image_url()}" alt="${p.name}"/>
+					<p class="text-center small-text">${p.name}</p>
+				</div>
+			</a>
+		</li>
+		% endfor
+		</ol>
+	</div>    
+</%block>
+
+<%block name="maintenance">
+	<section>
+		<div id="maintenance-info" class="alert alert-info" role="alert">This site is under construction</div>
+	</section>
+</%block>
+
+<%def name="login_logout_menu()">
+	% if request.user.is_authenticated:
+		<li><a href="/account/index">My Account</a></li>
+	% else:
+		<li><a href="/account/login">Login</a></li>
+	% endif
+</%def>
+
+<%def name="my_account_menu()">
+	% if request.user.is_authenticated:
+		<li><a href="/account/logout">Logout</a></li>
+	% else:
+		<li><a href="/account/signup">Sign Up</a></li>
+	% endif
+</%def>
