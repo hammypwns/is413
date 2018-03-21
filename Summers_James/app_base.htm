@@ -1,0 +1,150 @@
+<%inherit file="/homepage/templates/base.htm" />
+<%! from catalog import models as cmod %>
+
+<%block name="header">
+            <nav class="navbar navbar-inverse">
+                    <div class="navbar-header">
+                        <a class="navbar-brand" href="#" style="position: absolute; top:15px; left: 1px;">
+                          <img src="${ STATIC_URL }homepage/media/images/mylogo.png" alt="Site Logo" style="width:30px; height:30px;">
+                        </a>
+                      </div>
+                    <div class="container-fluid" style="font-size:20px;">
+                      <ul class="nav navbar-nav">
+                        <li class= " ${ 'active1' if request.dmp.page == 'index' else ''} " tabindex=1><a class="paddingright" href="/index">Home</a></li>
+                        <li class = " ${ 'active1' if request.dmp.page == 'about' else ''} " tabindex=2><a class="paddingright" href="/about">About</a></li>
+                        <li class = " ${ 'active1' if request.dmp.page == 'contact' else ''} " tabindex=3><a class="paddingright" href="/contact">Contact</a></li>
+                        <li class = " ${ 'active1' if request.dmp.page == 'terms' else ''} " tabindex=4><a class="paddingright" href= "/terms" >Terms</a></li>
+                        <li class = " ${ 'active1' if request.dmp.page == 'faq' else ''} " tabindex=5><a class="paddingright" href="/faq">FAQ</a></li>
+                        <li class = " ${ 'active1' if request.dmp.page == 'catalog' else ''} " tabindex=6><a class="paddingright" href="/catalog">Catalog</a></li>
+                        <li class = " ${ 'active1' if request.dmp.page == 'list' else ''} " tabindex=7><a class="paddingright" href="/catalog/list">Products</a></li>
+                        <li class = " ${ 'active1' if request.dmp.page == 'manager' else ''} " tabindex=9><a class="paddingright" href="/manager/manager">Manager</a></li>
+                    </ul>
+        
+                        <ul class="nav navbar-nav navbar-right">
+                            % if request.user.is_authenticated:
+                            <li class="accountDisplay">hello ${request.user}</li>
+                            <li class="dropdown">                          
+                                    <a href="#" class="nav navbar-nav navbar-right dropdown-toggle" type="button" data-toggle="dropdown" tabindex=10>Account
+                                      <span class="caret"></span></a>
+                                      <ul class="dropdown-menu">
+                                        <li class = " ${ 'active1' if request.dmp.page == 'logout' else ''} "><a href="/account/logout">Logout<i class="icon-user icon-white"></i></a></li> 
+                                        <li><a href="#">My Cart</a></li>
+                                        <li class="divider"></li>
+                                        <li><a href="#">My Account</a></li>
+                                      </ul>
+                                  </li>
+                            % else :
+                                <li class = " ${ 'active1' if request.dmp.page == 'signup' else ''} "><a href="/account/signup">Sign-Up<i class="icon-user icon-white"></i></a></li>                               
+                                <li class = " ${ 'active1' if request.dmp.page == 'login' else ''} "><a href="/account/login">Login<i class="icon-user icon-white"></i></a></li> 
+                            % endif 
+                        </ul>
+                    </div>
+                  </nav>
+        </%block>
+            
+    <%block name="catalogList">
+    <div class="myListTable" class="relative">
+        <div class="displayCategoryOuter">
+            <ul class="displayCategoryInner">
+                    <li><a href="/catalog/index/">All products</a></li>
+                    % for cat in categories:
+                    <li class = " ${ 'activeUnderline' if cat.id == underline else ''} "><a href="/catalog/index/${cat.id}">${cat.name}</a></li>
+                    % endfor
+            </ul>
+        </div>    
+    </%block>
+
+    <%block name="content">
+    The list of categories will populate in here
+    </%block>
+
+    <%block name="viewed">
+
+    <div style="position: absolute; top: 200px; left: 1250px; ">
+        Recently Viewed:
+        <ol style="display:flex; flex-direction: column;">
+        %for count, i in enumerate(request.session['last_five']):
+        %if (count != 5):
+        <a href="/catalog/detail/${i}"><li style="list-style: none"><img src="${cmod.Product.objects.filter(id = i)[0].image_url()}" style="width:50px; height:40px; margin:4px; padding: 2px; background-color: grey; border: 1px solid #CCCCCC;"/></li></a>
+        %endif:
+        %endfor:
+        </ol>
+    </div>
+    </%block>
+
+<%block name="footer">
+        <!--Footer-->
+        <footer class="myFooter">
+        
+                <!--Footer Links-->
+                <div class="container myContainFooter">
+                    <div class="row my-4">
+            
+                        <!--First column-->
+                        <div class="col-md-4 col-lg-4">
+                            <h5 class="title mb-4 font-bold footer-title">Footer Content</h5>
+                            <p>Here you can use rows and columns here to organize your footer content.</p>
+                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Fugit, error amet numquam iure provident
+                                voluptate esse quasi, veritatis totam voluptas nostrum. </p>
+                        </div>
+                        <!--/.First column-->
+            
+            
+                        <!--Second column-->
+                        <div class="col-md-2 col-lg-2 ml-auto">
+                            <h5 class="title mb-4 font-bold footer-title">About</h5>
+                            <ul>
+                                <p><a href="#!">PROJECTS</a></p>
+                                <p><a href="#!">ABOUT US</a></p>
+                                <p><a href="#!">BLOG</a></p>
+                                <p><a href="#!">AWARDS</a></p>
+                            </ul>
+                        </div>
+                        <!--/.Second column-->
+            
+                        <!--Third column-->
+                        <div class="col-md-4 col-lg-3">
+                            <h5 class="title mb-4 font-bold footer-title">Address</h5>
+                            <!--Info-->
+                            <p><i class="fa fa-home mr-3"></i> New York, NY 10012, US</p>
+                            <p><i class="fa fa-envelope mr-3"></i> info@example.com</p>
+                            <p><i class="fa fa-phone mr-3"></i> + 01 234 567 88</p>
+                            <p><i class="fa fa-print mr-3"></i> + 01 234 567 89</p>
+                        </div>
+                        <!--/.Third column-->
+            
+                        <!--Fourth column-->
+                        <div class="col-md-2 col-lg-2 text-center">
+                            <h5 class="title mb-4 font-bold footer-title">Follow Us</h5>
+                            <!--Social buttons-->
+                            <div class="social-section mt-2 ">
+                                <!--Facebook-->
+                                <a type="button" class="btn-floating btn-small btn-fb"><i class="fa fa-facebook" style="padding-right: 20px;"><img src="${ STATIC_URL }homepage/media/images/facebook.png" style="width:30px; height: 30px;"/></i></a>
+                                <!--Twitter-->
+                                <a type="button" class="btn-floating btn-small btn-tw"><i class="fa fa-twitter"><img src="${ STATIC_URL }homepage/media/images/twitter.png" style="width:30px; height: 30px;"/></i></a>
+                                <!--Instagram-->
+                                <br><br>
+                                <a type="button" class="btn-floating btn-small btn-gplus"><i class="fa " style=" padding-right: 20px;"><img src="${ STATIC_URL }homepage/media/images/instagram.png" style="width:30px; height: 30px;"/></i></a>
+                                <!--Linked-In-->
+                                <a type="button" class="btn-floating btn-small btn-dribbble"><i class="fa fa-dribbble"><img src="${ STATIC_URL }homepage/media/images/linkedin.png" style="width:30px; height: 30px;"/></i></a>
+                            </div>
+                        </div>
+                        <!--/.Fourth column-->
+                      </div>
+                    </div>
+                    <!--/.Footer Links-->
+                
+                    <!--Copyright-->
+                    <div class="footer-copyright myfooter-copyright">
+                        <div class="container-fluid myfooter_container-fluid">
+                            <%! from datetime import datetime %>
+                             © ${ datetime.now().year } Copyright
+                        </div>
+                    </div>
+                    <!--/.Copyright-->
+                
+                </footer>
+                <!--/.Footer-->
+        </%block>
+
+

@@ -1,0 +1,17 @@
+<%inherit file="./catalog/templates/app_base.htm" />
+
+
+
+<%block name="content">
+                <br>
+            <h1 id="catName" class="CenterCatalogTitle">${categoryName}</h1>
+            <br>
+            <div id="imageDisplay">
+                    <a class="inline" id="prePage"> <<</a>
+                    <div class="inline" id="CurrentPage">${pageNumber}</div> of <div class="inline" id="TotalPages">${totalPageNumber}</div>
+                    <a class="inline" id="nextPage"> >></a>
+
+                </div>
+            <div id="catalog"></div>
+        </div>
+</%block>

@@ -1,0 +1,32 @@
+<%inherit file="./catalog/templates/app_base.htm" />
+
+
+
+<%block name="content">
+<div class="persCata">
+    <h1 style="left:45%; position: relative; top:18px;">${product.name}</h1>
+    <div style = "position:absolute; top: 70px; left: 20px;">
+        <ul style="display:flex; flex-direction: column; list-style: none;">
+        %for counter, im in enumerate(images):
+            %if "/static/catalog/media/products/" + im.filename != product.image_url():
+            <li class='miniPic${counter}'><img alt="${product.name}"style=" width:50px; height:40px; margin:4px; padding: 2px; background-color: grey; border: 1px solid #CCCCCC;" src="/static/catalog/media/products/${im.filename}"/></li>
+            %endif
+        %endfor:
+        </ul>
+    </div>
+        <div style="position: absolute; top: 70px; left: 100px; display: inline-block; width:225px; height: 225px; background-color: grey; border: 2px solid #CCCCCC; border-radius: 5px;">
+        <img id="mainPic" class="imageCatalogPers" src="${product.image_url()}"/>
+        </div>
+        <div class="cataDesc">
+        <p>${product.description}</p>
+        </div>
+    <div style="position: absolute; left: 400px; top: 250px;">
+        %if product.TITLE == 'Bulk':
+        <p style="display: inline;">Quantity: </p><input style="display: inline; width: 25px;" type=text/>
+        <br>
+        %endif:
+        <button style="background-color: orange">Buy</button>
+
+    </div>
+</div>
+</%block>
