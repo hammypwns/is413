@@ -1,1 +1,11 @@
-
+*.pyc
+*.pyo
+__pycache__/
+.cached-templates/
+venv/
+*.log
+*.pot
+.DS_Store
+.sass-cache/
+*.css.map
+django.mo
