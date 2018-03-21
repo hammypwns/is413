@@ -24,7 +24,6 @@ def process_request(request, category_id):
         page_title = 'Products'
         print("didn't find category")
 
-
     num_pages = 0
     if prod_count % 6 > 0:
         num_pages += 1

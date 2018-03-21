@@ -30,7 +30,6 @@ def process_request(request, product_id):
         category_id = product.category.id
         page_title = product.name
 
-
     #deals with category left hand pane
 
 

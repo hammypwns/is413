@@ -34,7 +34,6 @@ class LastFiveMiddleware:
 
         print(request.session['last_five'])
 
-
         for i in request.session['last_five']:
             print("i: " + str(i))
             request.last_five.append(cmod.Product.objects.get(id = i))
