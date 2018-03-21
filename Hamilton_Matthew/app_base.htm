@@ -1,0 +1,93 @@
+<%inherit file="/catalog/templates/base.htm" />
+<%! from catalog import models as cmod %>
+
+<%block name="nav">
+    <li class="${'activeaf' if request.dmp.app == "homepage" and request.dmp.page == 'index' else ''}"><a href="/index/">Home</a></li>
+    <li class="${'activeaf' if request.dmp.page == 'about' else ''}"><a class="nav-link" href="/about/">About Us</a></li>
+    <li class="${'activeaf' if request.dmp.page == 'contact' else ''}"><a class="nav-link" href="/contact/">Contact</a></li>
+    <li class="${'activeaf' if request.dmp.page == 'terms' else ''}"><a class="nav-link" href="/terms/">Terms</a></li>
+    <li class="${'activeaf' if request.dmp.page == 'faq' else ''}"><a class="nav-link" href="/faq/">FAQ</a></li>
+    <li class="${'activeaf' if request.dmp.app == 'catalog' and request.dmp.page == 'index' else ''}"><a class="nav-link" href="/catalog/index">Products</a></li>
+</%block>
+
+<%block name="nav_manager">
+  % if request.user.is_superuser:
+    <li class="dropdown">
+      <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><span class="glyphicon glyphicon-wrench"></span> Manager <span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="/manager/list">View Products</a></li>
+        <li><a href="/manager/edit">Create Product</a></li>
+        <li><a href="/manager/inactive">View Inactive</a></li>
+      </ul>
+    </li>
+  % endif
+</%block>
+
+<%block name="nav_login">
+  % if request.user.is_authenticated:
+    <li><a href="/account/details">My Account</a></li>
+  % else:
+    <li><a href="/account/login">Login</a></li>
+  % endif
+</%block>
+
+
+<%block name="nav_account">
+  % if request.user.is_authenticated:
+    <li><a href="/account/logout">Logout</a></li>
+  % else:
+    <li><a href="/account/signup">Sign Up</a></li>
+  % endif
+</%block>
+
+<!--<%block name="activemenu">
+    <script src="${ STATIC_URL }homepage/scripts/active-menu.js"></script>
+</%block> 
+I set this in base_htm now-->
+
+<%block name="content_left">
+        <div class="col-md-2 ">
+            <ul class="seo-list">
+              % if category_id == None:
+                <a id="all" href="/catalog/index" class = "bolded"><li>All Products</li></a>
+              % else:
+                <a id="all" href="/catalog/index"><li>All Products</li></a>
+              % endif
+
+                % for c in cmod.Category.objects.order_by('name'):
+                  % if str(c.id) == str(category_id):
+                    <a href="/catalog/index/${c.id}" class = "bolded"><li>${c.name}</li></a>
+                  % else:
+                    <a href="/catalog/index/${c.id}"><li>${c.name}</li></a>
+                  % endif
+                % endfor
+            </ul>
+        </div>
+</%block>
+
+
+<%block name = "content_right">   
+    <div class="col-md-2">
+      <h2 class = "myh2">Recently Viewed</h2>
+      <br/>
+
+      <ol class = "right_list">
+
+      % for product in request.last_five[1:6]:
+        <a href="/catalog/detail/${product.id}">
+          <li>
+            <img src="${product.image_url()}" class = "right_pane_image" alt = "${product.name}" >
+            <br>
+            <br>
+            ${product.name}
+            <br>
+            <br>
+          </li>
+        </a>
+      % endfor
+      <br>
+      </ol>
+      
+        
+    </div>    
+</%block>
