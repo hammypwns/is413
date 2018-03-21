@@ -1,0 +1,95 @@
+<%inherit file="/homepage/templates/app_base.htm" />
+<%! from catalog import models as cmod %>
+
+<%block name="left">
+    <div id="category_list" class="col-sm-2 ">
+        <ul class="seo-list">
+            <a id="all" class="categories" href="/catalog/index"><li>All Products</li></a>
+            % for cat in cmod.Category.objects.order_by('name'):
+                <a class="categories" href="/catalog/index/${cat.id}"><li>${ cat.name }</li></a>
+            % endfor
+        </ul>
+    </div>
+</%block>
+
+<%block name="right">
+  <div class="col-md-2">
+   <h2 class = "right_list_title">Recently Viewed</h2>
+   <ol class = "right_list">
+   % for product in request.last_five[1:6]:
+     <a href="/catalog/detail/${product.id}">
+       <li>
+         <p class="right_pane_name">${product.name}</p>
+         <img src="${product.image_url()}" class = "right_pane_image" alt = "${product.name}" />
+       </li>
+     </a>
+   % endfor
+   </ol>
+  </div>
+</%block>
+
+
+<%block name="nav">
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <span class="navbar-brand">
+            <img src="${ STATIC_URL }homepage/media/images/fomo-round.png" >
+        </span>
+      </div>
+      <ul class="nav navbar-nav">
+        <li class="nav-item"><a href="/homepage/index">Home</a></li>
+        <li class="nav-item ${ 'active' if request.dmp.page == 'index' else '' }"><a href="/catalog/index">Catalog</a></li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+
+      ${manager_menu()}
+      ${my_account_menu()}
+      ${login_logout_menu()}
+
+      </ul>
+      </div>
+  </nav>
+</%block>
+
+<%def name="login_logout_menu()">
+    % if request.user.is_authenticated:
+      <li class="dropdown">
+        <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-log-in"></span> ${ request.user }
+        <span class="caret"></span></a>
+        <ul class="dropdown-menu">
+          <li><a href="/account/index">My Account</a></li>
+          <li><a href="/account/index">My Orders</a></li>
+          <li role="separator" class="divider"></li>
+          <li><a href="/account/logout">Logout</a></li>
+        </ul>
+      </li>
+    % else:
+        <li><a href="/account/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+    % endif
+</%def>
+
+<%def name="manager_menu()">
+    % if request.user.is_superuser:
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" href="#"><span class="glyphicon glyphicon-log-in"></span> Manager
+      <span class="caret"></span></a>
+      <ul class="dropdown-menu">
+        <li><a href="/manager/createproduct">Create Product</a></li>
+        <li><a href="/manager/editproducts">Edit Products</a></li>
+        <li><a href="/manager/createcategory">Create Category</a></li>
+        <li><a href="/admin/">Administrator</a></li>
+      </ul>
+    </li>
+    % else:
+        <!-- show nothing -->
+    % endif
+</%def>
+
+<%def name="my_account_menu()">
+    % if request.user.is_authenticated:
+        <!-- show nothing -->
+    % else:
+        <li><a href="/account/signup"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+    % endif
+</%def>
